@@ -14,8 +14,8 @@ const ProductGrid = ({ products, loading ,error }) => {
           <div className="bg-white p-4 rounded-lg">
             <div className="aspect-[3/4] w-full mb-4 overflow-hidden rounded-lg">
               <img
-                src={product.images[0].url}
-                alt={product.images[0].alText || product.name}
+                src={product.colors[0]?.images[0].url }
+                alt={product.colors[0]?.images[0].alText || product.name}
                 className="w-full h-full object-cover rounded-lg"
               />
             </div>

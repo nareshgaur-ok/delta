@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { FiChevronsLeft, FiChevronsRight } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import { useRef } from "react";
 import axios from "axios";
 
 const NewArrivals = () => {
@@ -15,15 +14,14 @@ const NewArrivals = () => {
   const [newArrivals, setNewArrivals] = useState([]);
 
   useEffect(() => {
-    
     const fetchNewArrivals = async () => {
       try {
-        const response = await axios.get(
+        const res = await axios.get(
           `${import.meta.env.VITE_BACKEND_URL}/api/products/new-arrivals`
         );
-        setNewArrivals(response.data);
-      } catch (error) {
-        console.log(error);
+        setNewArrivals(res.data);
+      } catch (err) {
+        console.log(err);
       }
     };
     fetchNewArrivals();
@@ -35,51 +33,39 @@ const NewArrivals = () => {
     setScrollLeft(scrollRef.current.scrollLeft);
   };
 
-  const scroll = (direction) => {
-    const scrollAmount = direction === "left" ? -300 : 300;
-    // console.log("124, ", scrollRef);
-    scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+  const scroll = (dir) => {
+    scrollRef.current.scrollBy({
+      left: dir === "left" ? -300 : 300,
+      behavior: "smooth",
+    });
   };
-  // updates scroll button
 
   const updateScrollButtons = () => {
     const container = scrollRef.current;
-    if (container) {
-      const leftScroll = container.scrollLeft;
-      const rightScrollable =
-        container.scrollWidth > leftScroll + container.clientWidth;
-      setCanScrollLeft(leftScroll > 0);
-      setCanScrollRight(rightScrollable);
-      // console.log("52",rightScrollable);
-    }
-      // console.log({
-      //   scrollLeft: container.scrollLeft,
-      //   clientWidth: container.clientWidth,
-      //   containerScrollerWidth: container.scrollWidth,
-      //   OFFSETLEFT: container.offsetLeft,
-      // });
+    if (!container) return;
+    const leftScroll = container.scrollLeft;
+    const rightScrollable =
+      container.scrollWidth > leftScroll + container.clientWidth;
+    setCanScrollLeft(leftScroll > 0);
+    setCanScrollRight(rightScrollable);
   };
 
   const handleMouseMove = (e) => {
     if (!isDragging) return;
     const x = e.pageX - scrollRef.current.offsetLeft;
-    
     const walk = x - startX;
     scrollRef.current.scrollLeft = scrollLeft - walk;
   };
 
-  const handleMouseUpOrLeave = (e) => {
-    setIsDragging(false);
-  };
+  const handleMouseUpOrLeave = () => setIsDragging(false);
 
   useEffect(() => {
-    
-    // console.log("NewA46", scrollRef);
     const container = scrollRef.current;
     if (container) {
       container.addEventListener("scroll", updateScrollButtons);
       updateScrollButtons();
-      return () => container.removeEventListener("scroll", updateScrollButtons);
+      return () =>
+        container.removeEventListener("scroll", updateScrollButtons);
     }
   }, [newArrivals]);
 
@@ -92,7 +78,6 @@ const NewArrivals = () => {
           keep your wardrobe on the cutting edge of fashion
         </p>
 
-        {/* scroll Buttons */}
         <div className="absolute right-0 bottom-[-30px] flex space-x-2">
           <button
             onClick={() => scroll("left")}
@@ -119,7 +104,6 @@ const NewArrivals = () => {
         </div>
       </div>
 
-      {/* Scrollable Section */}
       <div
         ref={scrollRef}
         className={`container mx-auto overflow-x-scroll flex space-x-6 relative ${
@@ -130,27 +114,39 @@ const NewArrivals = () => {
         onMouseUp={handleMouseUpOrLeave}
         onMouseLeave={handleMouseUpOrLeave}
       >
-        {newArrivals.map((product) => (
-          <div
-            key={product._id}
-            className="min-w-[50%] sm:min-w-50% lg:min-w-30% relative"
-          >
-            <Link to={`/product/${product._id}`}>
-              <img
-                src={product.images[0]?.url}
-                alt={product.images[0]?.altText || product.name}
-                className="w-full h-[500px] object-cover rounded-lg"
-                draggable="false"
-              />
-            </Link>
-            <div className="absolute  bottom-0  left-0 right-0 bg-opacity-50 backdrop-blur-md text-white p-4 rounded-b-lg">
-              <Link to={`/product/${product._id}`} className="block">
-                <h4 className="font-medium">{product.name}</h4>
-                <p className="mt-1">{product.price}</p>
+        {newArrivals.map((product) => {
+          // pick color image if available
+          const hasColors =
+            product.colors && product.colors.length > 0 && product.colors[0].images.length > 0;
+          const imgUrl = hasColors
+            ? product.colors[0].images[0].url
+            : product.images[0]?.url;
+          const altText = hasColors
+            ? product.colors[0].images[0].altText || product.name
+            : product.images[0]?.altText || product.name;
+
+          return (
+            <div
+              key={product._id}
+              className="min-w-[50%] sm:min-w-50% lg:min-w-30% relative"
+            >
+              <Link to={`/product/${product._id}`}>
+                <img
+                  src={imgUrl}
+                  alt={altText}
+                  className="w-full h-[500px] object-cover rounded-lg"
+                  draggable="false"
+                />
               </Link>
+              <div className="absolute bottom-0 left-0 right-0 bg-opacity-50 backdrop-blur-md text-white p-4 rounded-b-lg">
+                <Link to={`/product/${product._id}`} className="block">
+                  <h4 className="font-medium">{product.name}</h4>
+                  <p className="mt-1">{product.price}</p>
+                </Link>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

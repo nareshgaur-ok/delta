@@ -11,19 +11,22 @@ const productSchema = new mongoose.Schema(
     category: { type: String, required: true },
     brand: { type: String, required: true },
     sizes: { type: [String], required: true },
-    colors: { type: [String], required: true },
+    colors: [
+      {
+        name: { type: String, required: true },
+        code: { type: String, required: true },
+        images: [
+          {
+            url: { type: String, required: true },
+            altText: { type: String },
+          },
+        ],
+      },
+    ],
     collection: { type: String, required: true },
     material: { type: String },
     gender: { type: String, enum: ["Men", "Women", "Unisex"] },
-    images: [
-      {
-        url: {
-          type: String,
-          required: true,
-        },
-        altText: { type: String },
-      },
-    ],
+
     isFeatured: {
       type: Boolean,
       default: false,

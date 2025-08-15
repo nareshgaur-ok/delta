@@ -9,10 +9,10 @@ const OrderDetailsPage = () => {
   const dispatch = useDispatch();
   const { orderDetails, loading, error } = useSelector((state) => state.orders);
 
-  // console.log("ODep12",orderDetails);
+  console.log("ODep12", orderDetails);
   useEffect(() => {
     dispatch(fetchOrderDetails(id));
-  },[dispatch, id]);
+  }, [dispatch, id]);
 
   if (loading) return <p> Loading cart...</p>;
   if (error) return <p> Error: {error}</p>;
@@ -66,7 +66,9 @@ const OrderDetailsPage = () => {
               <h4 className="text-lg font-semibold mb-2 ">Shipping Info</h4>
               <p>Shipping Method:{orderDetails.shippingMethod}</p>
               <p>
-                Address:{orderDetails.shippingAddress.city},
+                Address:{orderDetails.shippingAddress.phone}<br/>
+                {orderDetails.shippingAddress.address},
+                {orderDetails.shippingAddress.city},
                 {orderDetails.shippingAddress.country}
               </p>
             </div>

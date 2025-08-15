@@ -44,7 +44,7 @@ const CheckOut = () => {
   }, [loadScript]);
 
   const handlePaymentSuccess = async (details, checkoutId) => {
-    console.log("co146", details);
+    // console.log("co146", details);
     try {
       const response = await axios.put(
         `${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/pay`,
@@ -110,7 +110,7 @@ const CheckOut = () => {
       );
 
       const data = res.data;
-      console.log("cheout130", data);
+      // console.log("cheout130", data);
 
       if (typeof window.Razorpay === "undefined") {
         alert("Razorpay SDK not available.");
@@ -123,7 +123,7 @@ const CheckOut = () => {
         ...data,
 
         handler: async function (response) {
-          console.log("cho127", response);
+          // console.log("cho127", response);
 
           const option2 = {
             order_id: response.razorpay_order_id,
@@ -135,7 +135,7 @@ const CheckOut = () => {
             option2
           );
 
-          console.log("cho139:verifyRes", verifyRes);
+          // console.log("cho139:verifyRes", verifyRes);
 
           if (verifyRes.data.success) {
             handlePaymentSuccess("abc", checkoutId);
