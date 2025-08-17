@@ -4,6 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { createCheckout } from "../../redux/slices/checkoutSlice";
 import axios from "axios";
+import { RiInputField } from "react-icons/ri";
+import { toast } from "sonner";
+import checkoutSchema from "../../pages/checkout-schema";
 
 const CheckOut = () => {
   const dispatch = useDispatch();
@@ -12,13 +15,15 @@ const CheckOut = () => {
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const [checkoutId, setCheckoutId] = useState(null);
+  const [message, setMessage] = useState("");
+
   const [shippingAddress, setShippingAddress] = useState({
     firstName: "",
     lastName: "",
     address: "",
     city: "",
     postalCode: "",
-    country: "",
+    country: "INDIA",
     phone: "",
   });
 
@@ -56,7 +61,7 @@ const CheckOut = () => {
         }
       );
 
-      console.log("cho60", response);
+      // console.log("cho60", response);
       if (response.status === 201) {
         const handleFinalizeCheckout = async (checkoutId) => {
           try {
@@ -141,7 +146,15 @@ const CheckOut = () => {
             handlePaymentSuccess("abc", checkoutId);
           } else {
             alert("Payment verification failed");
+            setMessage("");
           }
+        },
+        modal: {
+          ondismiss: function () {
+            // User closed the Razorpay modal (clicked X)
+            setMessage(""); // remove the message
+            console.log("Payment cancelled by user");
+          },
         },
       });
       paymentObject.open();
@@ -153,6 +166,34 @@ const CheckOut = () => {
   // console.log("cho-cart", cart);
   const handleCreateCheckout = async (e) => {
     e.preventDefault();
+    const formData = {
+      email: user ? user.email : "",
+      shippingAddress,
+    };
+
+    const result = checkoutSchema.safeParse(formData);
+    // console.log("chko171",result.error.format());
+    if (!result.success) {
+      const errors = result.error.format();
+
+      // Show toast for the first available error
+      const firstError =
+        errors.email?._errors[0] ||
+        errors.shippingAddress?.firstName?._errors[0] ||
+        errors.shippingAddress?.address?._errors[0] ||
+        errors.shippingAddress?.city?._errors[0] ||
+        errors.shippingAddress?.postalCode?._errors[0] ||
+        errors.shippingAddress?.country?._errors[0] ||
+        errors.shippingAddress?.phone?._errors[0];
+
+      if (firstError) toast.error(firstError);
+      return; // 🛑 Stop here if validation fails
+    }
+
+
+    // Show message immediately
+    setMessage("Processing your checkout...");
+
     if (cart && cart.products.length > 0) {
       const res = await dispatch(
         createCheckout({
@@ -164,9 +205,11 @@ const CheckOut = () => {
       );
       if (res.payload && res.payload._id) {
         // console.log("cho20", res.payload);
+
         setCheckoutId(res.payload._id); //Set checkout ID if checkout was successful
 
-        handleRazorpayPayment(cart.totalPrice, res.payload._id);
+        setMessage("Redirecting to payment gateway...");
+        handleRazorpayPayment(cart.totalPrice + 30, res.payload._id);
       }
     }
     // setCheckoutId(123); //Set checkout ID if checkout was successful
@@ -196,7 +239,7 @@ const CheckOut = () => {
           <h3 className="text-lg mb-4">Delivery</h3>
           <div className="mb-4 grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-gray-700">First Name</label>
+              <label className="block text-gray-700">First Name *</label>
               <input
                 type="text"
                 value={shippingAddress.firstName}
@@ -227,7 +270,7 @@ const CheckOut = () => {
             </div>
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Address</label>
+            <label className="block text-gray-700">Address *</label>
             <input
               type="text"
               value={shippingAddress.address}
@@ -243,7 +286,7 @@ const CheckOut = () => {
           </div>
           <div className="mb-4 grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-gray-700">City</label>
+              <label className="block text-gray-700">City *</label>
               <input
                 type="text"
                 value={shippingAddress.city}
@@ -258,7 +301,7 @@ const CheckOut = () => {
               />
             </div>
             <div>
-              <label className="block text-gray-700">Postal Code</label>
+              <label className="block text-gray-700">Postal Code *</label>
               <input
                 type="text"
                 value={shippingAddress.postalCode}
@@ -289,56 +332,29 @@ const CheckOut = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Phone</label>
-            <input
-              type="tel"
-              value={shippingAddress.phone}
-              onChange={(e) => {
-                setShippingAddress({
-                  ...shippingAddress,
-                  phone: e.target.value,
-                });
-              }}
-              className="w-full p-2 border rounded"
-              required
-            />
+            <label className="block text-gray-700">Phone *</label>
+            <div className="flex">
+              <span className="inline-flex items-center px-3 bg-gray-200 border rounded-l">
+                +91
+              </span>
+              <input
+                type="tel"
+                value={shippingAddress.phone}
+                onChange={(e) => {
+                  setShippingAddress({
+                    ...shippingAddress,
+                    phone: e.target.value,
+                  });
+                }}
+                className="w-full p-2 border rounded"
+                required
+              />
+            </div>
           </div>
           <button className="w-full bg-black text-white py-3 rounded">
             Continue to Payment
           </button>
-
-          {/* 
-          <div className="mt-6">
-            {!checkoutId ? (
-              <button className="w-full bg-black text-white py-3 rounded"  
-              // onClick={() => {
-              //     onPayment();
-              //   }}
-              >
-                Continue to Payment
-              </button>
-            ) : (
-              <button
-                type="button"
-                className="w-full bg-black text-white py-3 rounded"
-                // onClick={() => {
-                //   onPayment();
-                // }}
-              >
-                Razorpay Payment
-              </button>
-              // <div>
-              //   <h3 className="text-lg mb-4">Pay with Paypal</h3>
-              //   <PayPalButton
-              //     amount={cart.totalPrice}
-              //     onSuccess={handlePaymentSuccess}
-              //     onError={(err) => {
-              //       alert("payent failed. Try again");
-              //     }}
-              //   />
-              // </div>
-            )}
-          </div> */}
+          {message && <p className="mt-4 text-green-600">{message}</p>}
         </form>
       </div>
 
@@ -367,17 +383,21 @@ const CheckOut = () => {
             </div>
           ))}
         </div>
-        <div className="flex justify-between items-center text-lg mb-4">
-          <p>Sub Total</p>
-          <p>{cart.totalPrice.toLocaleString()}</p>
-        </div>
-        <div className="flex justify-between items-center text-lg">
-          <p>Shipping</p>
-          <p>Free</p>
-        </div>
-        <div className="flex justify-between items-center text-lg mb-4 border-t pt-4">
-          <p>Total</p>
-          <p>Rs {cart.totalPrice?.toLocaleString()}</p>
+        <div className="flex flex-col">
+          <div className="flex justify-between items-center text-lg mb-4">
+            <p>Sub Total</p>
+            <p>Rs {cart.totalPrice?.toLocaleString()}</p>
+          </div>
+
+          <div className="flex justify-between items-center text-lg mb-4">
+            <p>Delivery Charge</p>
+            <p>Rs 30</p>
+          </div>
+
+          <div className="flex justify-between items-center text-lg mb-4 border-t pt-4">
+            <p>Total</p>
+            <p>Rs {(cart.totalPrice + 30)?.toLocaleString()}</p>
+          </div>
         </div>
       </div>
     </div>
