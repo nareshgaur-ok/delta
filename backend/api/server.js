@@ -1,6 +1,6 @@
-const dotenv =require("dotenv");
+const dotenv = require("dotenv");
 const express = require("express");
-const cors =require("cors");
+const cors = require("cors");
 const connectDB = require("../config/db");
 const userRoutes = require("../routes/userRoutes");
 const productRoutes = require("../routes/productRoutes");
@@ -13,34 +13,43 @@ const productAdminRoutes = require("../routes/productAdminRoutes");
 const adminOrderRoutes = require("../routes/adminOrderRoutes");
 const paymentRoutes = require("../routes/payments.routes");
 
-
-const app= express();
+const app = express();
 app.use(express.json());
-app.use(cors({domain:["https://bazar-three-jet.vercel.app"]}));
+app.use(
+  cors({
+    origin: ["https://bazar-three-jet.vercel.app"],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  })
+);
 
 dotenv.config();
-const PORT=process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 connectDB();
 
-app.get("/",(req,res)=>{
-res.send("Welcome Rabbits Its API");    
-})
+app.get("/", (req, res) => {
+  res.send("Welcome Rabbits Its API");
+});
 
 // API Routes
-app.use("/api",paymentRoutes);
-app.use("/api/users",userRoutes);
-app.use("/api/products",productRoutes);
-app.use("/api/cart",cartRoutes);
-app.use("/api/checkout",checkoutRoutes);
-app.use("/api/orders",orderRoutes);
-app.use("/api/upload",uploadRoutes);
+app.use("/api", paymentRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/checkout", checkoutRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/upload", uploadRoutes);
 
 //Admin
-app.use("/api/admin/users",adminRoutes);
+app.use("/api/admin/users", adminRoutes);
 app.use("/api/admin/products", productAdminRoutes);
 app.use("/api/admin/orders", adminOrderRoutes);
 
-app.listen(PORT,()=>{
-    console.log(`server is running on ${process.env.NODE_ENV=== 'production'? 'https': 'http'}://localhost:${PORT}`);
+app.listen(PORT, () => {
+  console.log(
+    `server is running on ${
+      process.env.NODE_ENV === "production" ? "https" : "http"
+    }://localhost:${PORT}`
+  );
 });
