@@ -26,6 +26,7 @@ router.post("/", async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
+    // console.log("carRo26",product);
 
     // find the selected color object for getting the image
     const selectedColorObj = product.colors.find((c) => c.name === color);
@@ -56,6 +57,7 @@ router.post("/", async (req, res) => {
           name: product.name,
           image: productImage,
           price: product.price,
+          discountPrice: product.discountPrice,
           size,
           color,
           quantity,
@@ -64,7 +66,7 @@ router.post("/", async (req, res) => {
 
       // recalc total
       cart.totalPrice = cart.products.reduce(
-        (acc, item) => acc + item.price * item.quantity,
+        (acc, item) => acc + item.discountPrice * item.quantity,
         0
       );
 
@@ -81,12 +83,13 @@ router.post("/", async (req, res) => {
             name: product.name,
             image: productImage,
             price: product.price,
+            discountPrice: product.discountPrice,
             size,
             color,
             quantity,
           },
         ],
-        totalPrice: product.price * quantity,
+        totalPrice: product.discountPrice * quantity,
       });
 
       return res.status(201).json(newCart);
@@ -257,8 +260,5 @@ router.post("/merge", protect, async (req, res) => {
     res.status(500).json({ message: " Server Error" });
   }
 });
-
-
-
 
 module.exports = router;

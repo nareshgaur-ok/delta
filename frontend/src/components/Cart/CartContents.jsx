@@ -6,7 +6,7 @@ import {
 } from "../../redux/slices/cartSlice";
 const CartContents = ({ cart, userId, guestId }) => {
   const dispatch = useDispatch();
-
+  
   //handle adding and substracting cart
   const handleAddCart = (productId, delta, quantity, size, color) => {
     const newQuantity = quantity + delta;
@@ -23,24 +23,24 @@ const CartContents = ({ cart, userId, guestId }) => {
       );
     }
   };
-
+  
   const handleRemoveFromCart = (productId, size, color) => {
     dispatch(removeFromCart({ productId, userId, guestId, size, color }));
   };
-
+  
   return (
     <div>
       {cart.products.map((product, index) => (
         <div
-          key={index}
-          className="flex items-start justify-between  py-4  border-b"
+        key={index}
+        className="flex items-start justify-between  py-4  border-b"
         >
           <div className="flex items-start">
             <img
               src={product.image}
               alt={product.name}
               className="w-20 h-24 object-cover  mr-4 rounded"
-            />
+              />
           </div>
 
           <div>
@@ -59,6 +59,7 @@ const CartContents = ({ cart, userId, guestId }) => {
                     product.size,
                     product.color
                   );
+                  // console.log("cetCo62", product);
                 }}
                 className="border rounded px-2 py-1  text-xl font-medium"
               >
@@ -83,7 +84,7 @@ const CartContents = ({ cart, userId, guestId }) => {
           </div>
 
           <div>
-            <p>{product.price.toLocaleString()}</p>
+            <p>{product.discountPrice.toLocaleString()}</p>
             <button
               onClick={() => {
                 handleRemoveFromCart(

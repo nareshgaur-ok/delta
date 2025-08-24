@@ -379,7 +379,7 @@ const CheckOut = () => {
                   <p className="text-gray-500">Color:{product.color}</p>
                 </div>
               </div>
-              <p className="text-xl">Rs{product.price?.toLocaleString()}</p>
+              <p className="text-xl">Rs{product.discountPrice?.toLocaleString()}</p>
             </div>
           ))}
         </div>
