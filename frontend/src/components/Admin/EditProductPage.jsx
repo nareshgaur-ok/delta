@@ -1,32 +1,35 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchProductDetails } from "../../redux/slices/productSlice";
 import axios from "axios";
+import { fetchProductDetails } from "../../redux/slices/productSlice";
 import { updateProduct } from "../../redux/slices/adminProductSlice";
 
 const EditProductPage = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
-
   const navigate = useNavigate();
+
   const { selectedProduct, loading, error } = useSelector(
     (state) => state.products
   );
+
   const [productData, setProductData] = useState({
     name: "",
     description: "",
     price: 0,
+    discountPrice: 0,
     countInStock: 0,
     sku: "",
     category: "",
     brand: "",
     sizes: [],
-    colors: [],
-    collections: "",
+    colors: [], // [{ name, code, images: [{url,altText}] }]
+    collection: "",
     material: "",
     gender: "",
-      });
+    tags: [],
+  });
 
   const [uploading, setUploading] = useState(false);
 
@@ -38,19 +41,55 @@ const EditProductPage = () => {
 
   useEffect(() => {
     if (selectedProduct) {
-      setProductData(selectedProduct);
+      setProductData({
+        ...selectedProduct,
+        sizes: selectedProduct.sizes || [],
+        colors: selectedProduct.colors || [],
+      });
     }
   }, [selectedProduct]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProductData((prevData) => ({ ...prevData, [name]: value }));
-    // console.log("sd=",e.productData.value)
+    setProductData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageUpload = async (e) => {
+  const handleSizesChange = (e) => {
+    setProductData({
+      ...productData,
+      sizes: e.target.value.split(",").map((s) => s.trim()),
+    });
+  };
+
+  /** ----------------- COLORS HANDLING ----------------- **/
+
+  // Add a new color entry
+  const addColor = () => {
+    setProductData((prev) => ({
+      ...prev,
+      colors: [...prev.colors, { name: "", code: "", images: [] }],
+    }));
+  };
+
+  // Remove a color
+  const removeColor = (index) => {
+    setProductData((prev) => ({
+      ...prev,
+      colors: prev.colors.filter((_, i) => i !== index),
+    }));
+  };
+
+  // Handle color field changes
+  const handleColorChange = (index, field, value) => {
+    const updatedColors = productData.colors.map((color, i) =>
+      i === index ? { ...color, [field]: value } : color
+    );
+    setProductData((prev) => ({ ...prev, colors: updatedColors }));
+  };
+
+  // Upload image for a specific color
+  const handleImageUpload = async (e, colorIndex) => {
     const file = e.target.files[0];
-    // console.log(file);
     const formData = new FormData();
     formData.append("image", file);
 
@@ -59,150 +98,223 @@ const EditProductPage = () => {
       const { data } = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/upload`,
         formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
+      const updatedColors = productData.colors.map((color, index) => {
+        if (index === colorIndex) {
+          return {
+            ...color,
+            images: [
+              ...color.images, // keep existing images
+              { url: data.imageUrl, altText: "" }, // add new image
+            ],
+          };
+        }
+        return color; // other colors remain unchanged
+      });
 
-      setProductData((prevData) => ({
-        ...prevData,
-        images: [...prevData.images, { url: data.imageUrl, altText: "" }],
-      }));
+      setProductData((prev) => ({ ...prev, colors: updatedColors }));
       setUploading(false);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.error(err);
       setUploading(false);
     }
   };
 
-  const handleSubmit = (e) => {
+  const removeImage = (colorIndex, imgIndex) => {
+    const updatedColors = [...productData.colors];
+    updatedColors[colorIndex].images = updatedColors[colorIndex].images.filter(
+      (_, i) => i !== imgIndex
+    );
+    setProductData((prev) => ({ ...prev, colors: updatedColors }));
+  };
+
+  /** ----------------- SUBMIT ----------------- **/
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(productData);
-    dispatch(updateProduct({ id, productData }));
-    navigate("/admin/products");
+    // console.log("epp131",productData);
+    const resultAction = await dispatch(updateProduct({ id, productData }));
+
+    if (updateProduct.fulfilled.match(resultAction)) {
+      // ✅ success
+      navigate("/admin/products");
+    } else {
+      console.error("Update failed:", resultAction.error);
+    }
   };
 
   if (loading) return <p>Loading..</p>;
-  if (error) return <p>Error:{error}</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div className="max-w-5xl mx-auto p-6 shadow-md rounded-md">
       <h2 className="text-3xl font-bold mb-6">Edit Product</h2>
+
       <form onSubmit={handleSubmit}>
-        {/* Name */}
+        {/* BASIC FIELDS */}
         <div className="mb-6">
-          <label className="block font-semibold mb-2">Product Name</label>
+          <label className="block font-semibold mb-2">Name</label>
           <input
             type="text"
             name="name"
             value={productData.name}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2"
+            className="w-full border p-2 rounded"
             required
           />
         </div>
-        {/* description */}
+
         <div className="mb-6">
           <label className="block font-semibold mb-2">Description</label>
           <textarea
             name="description"
             value={productData.description}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2"
             rows={4}
-            required
+            className="w-full border p-2 rounded"
           />
         </div>
-        {/* price */}
 
-        <div className="mb-6">
-          <label className="block font-semibold mb-2">Price</label>
-          <input
-            type="number"
-            name="price"
-            value={productData.price}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2"
-          />
-        </div>
-        {/* count in stock */}
-        <div className="mb-6">
-          <label className="block font-semibold mb-2">Count in stock</label>
-          <input
-            type="number"
-            name="countInStock"
-            value={productData.countInStock}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2"
-          />
-        </div>
-        {/* sku */}
-        <div className="mb-6">
-          <label className="block font-semibold mb-2">SKU</label>
-          <input
-            type="text"
-            name="sku"
-            value={productData.sku}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2"
-          />
-        </div>
-        {/* sizes */}
-        <div className="mb-6">
-          <label className="block font-semibold mb-2">
-            Sizes(Comma-separated)
-          </label>
-          <input
-            type="text"
-            name="sizes"
-            value={productData.sizes.join(",")}
-            onChange={(e) =>
-              setProductData({
-                ...productData,
-                sizes: e.target.value.split(",").map((size) => size.trim()),
-              })
-            }
-            className="w-full border border-gray-300 rounded-md p-2"
-          />
-        </div>
-        {/* colors */}
-        <div className="mb-6">
-          <label className="block font-semibold mb-2">
-            Colors(Comma-separated)
-          </label>
-          <input
-            type="text"
-            name="colors"
-            value={productData.colors.join(",")}
-            onChange={(e) =>
-              setProductData({
-                ...productData,
-                colors: e.target.value.split(",").map((color) => color.trim()),
-              })
-            }
-            className="w-full border border-gray-300 rounded-md p-2"
-          />
-        </div>
-        {/* image */}
-        <div className="mb-6">
-          <label className="block font-semibold mb-2">Upload Image</label>
-          <input type="file" onChange={handleImageUpload} />
-          {uploading && <p>Uploading Image..</p>}
-          <div className="flex gap-4 mt-4">
-            {productData.images.map((image, index) => (
-              <div key={index}>
-                <img
-                  src={image.url}
-                  alt={image.altText || "Product Image"}
-                  className="w-20 h-20  object-cover  shadow-md"
-                />
-              </div>
-            ))}
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <div>
+            <label className="block font-semibold mb-2">Price</label>
+            <input
+              type="number"
+              name="price"
+              value={productData.price}
+              onChange={handleChange}
+              className="w-full border p-2 rounded"
+            />
+          </div>
+          <div>
+            <label className="block font-semibold mb-2">Discount Price</label>
+            <input
+              type="number"
+              name="discountPrice"
+              value={productData.discountPrice}
+              onChange={handleChange}
+              className="w-full border p-2 rounded"
+            />
           </div>
         </div>
+
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <div>
+            <label className="block font-semibold mb-2">Count in Stock</label>
+            <input
+              type="number"
+              name="countInStock"
+              value={productData.countInStock}
+              onChange={handleChange}
+              className="w-full border p-2 rounded"
+            />
+          </div>
+          <div>
+            <label className="block font-semibold mb-2">SKU</label>
+            <input
+              type="number"
+              name="sku"
+              value={productData.sku}
+              onChange={handleChange}
+              className="w-full border p-2 rounded"
+            />
+          </div>
+        </div>
+
+        <div className="mb-6">
+          <label className="block font-semibold mb-2">
+            Sizes (comma separated)
+          </label>
+          <input
+            type="text"
+            value={productData.sizes.join(",")}
+            onChange={handleSizesChange}
+            className="w-full border p-2 rounded"
+          />
+        </div>
+
+        {/* ---------------- COLORS ---------------- */}
+        <div className="mb-6">
+          <h3 className="text-xl font-bold mb-4">Colors</h3>
+          {productData.colors.map((color, idx) => (
+            <div key={idx} className="border p-4 mb-4 rounded shadow-sm">
+              <div className="grid grid-cols-2 gap-4 mb-2">
+                <div>
+                  <label className="block text-sm">Color Name</label>
+                  <input
+                    type="text"
+                    value={color.name}
+                    onChange={(e) =>
+                      handleColorChange(idx, "name", e.target.value)
+                    }
+                    className="w-full border p-2 rounded"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm">Color Code (hex)</label>
+                  <input
+                    type="text"
+                    value={color.code}
+                    onChange={(e) =>
+                      handleColorChange(idx, "code", e.target.value)
+                    }
+                    placeholder="#FF0000"
+                    className="w-full border p-2 rounded"
+                  />
+                </div>
+              </div>
+
+              {/* Images for this color */}
+              <div className="mb-2">
+                <label className="block text-sm">Upload Images</label>
+                <input
+                  type="file"
+                  onChange={(e) => handleImageUpload(e, idx)}
+                />
+                {uploading && <p>Uploading...</p>}
+                <div className="flex gap-2 mt-2">
+                  {color.images.map((img, i) => (
+                    <div key={i} className="relative">
+                      <img
+                        src={img.url}
+                        alt={img.altText || "Color Image"}
+                        className="w-16 h-16 object-cover rounded"
+                      />
+                      <button
+                        type="button"
+                        className="absolute top-0 right-0 bg-red-500 text-white text-xs px-1"
+                        onClick={() => removeImage(idx, i)}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => removeColor(idx)}
+                className="mt-2 bg-red-500 text-white px-3 py-1 rounded"
+              >
+                Remove Color
+              </button>
+            </div>
+          ))}
+
+          <button
+            type="button"
+            onClick={addColor}
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            + Add Color
+          </button>
+        </div>
+
         <button
           type="submit"
-          className="w-full bg-green-500 text-white p-2 hover:bg-green-600"
+          className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600"
         >
           Update Product
         </button>
@@ -212,3 +324,224 @@ const EditProductPage = () => {
 };
 
 export default EditProductPage;
+
+// import { useEffect, useState } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import { useNavigate, useParams } from "react-router-dom";
+// import { fetchProductDetails } from "../../redux/slices/productSlice";
+// import axios from "axios";
+// import { updateProduct } from "../../redux/slices/adminProductSlice";
+
+// const EditProductPage = () => {
+//   const dispatch = useDispatch();
+//   const { id } = useParams();
+
+//   const navigate = useNavigate();
+//   const { selectedProduct, loading, error } = useSelector(
+//     (state) => state.products
+//   );
+//   const [productData, setProductData] = useState({
+//     name: "",
+//     description: "",
+//     price: 0,
+//     countInStock: 0,
+//     sku: "",
+//     category: "",
+//     brand: "",
+//     sizes: [],
+//     colors: [],
+//     collections: "",
+//     material: "",
+//     gender: "",
+//   });
+
+//   console.log("EPP32", productData);
+//   console.log("EPP33", selectedProduct);
+//   const [uploading, setUploading] = useState(false);
+
+//   useEffect(() => {
+//     if (id) {
+//       dispatch(fetchProductDetails(id));
+//     }
+//   }, [dispatch, id]);
+
+//   useEffect(() => {
+//     if (selectedProduct) {
+//       setProductData({
+//         ...selectedProduct,
+//         sizes: selectedProduct.sizes || [],
+//         colors: selectedProduct.colors || [],
+//       });
+//     }
+//   }, [selectedProduct]);
+
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
+//     setProductData((prevData) => ({ ...prevData, [name]: value }));
+//     // console.log("sd=",e.productData.value)
+//   };
+
+//   const handleImageUpload = async (e) => {
+//     const file = e.target.files[0];
+//     // console.log(file);
+//     const formData = new FormData();
+//     formData.append("image", file);
+
+//     try {
+//       setUploading(true);
+//       const { data } = await axios.post(
+//         `${import.meta.env.VITE_BACKEND_URL}/api/upload`,
+//         formData,
+//         {
+//           headers: { "Content-Type": "multipart/form-data" },
+//         }
+//       );
+
+//       setProductData((prevData) => ({
+//         ...prevData,
+//         images: [...prevData.images, { url: data.imageUrl, altText: "" }],
+//       }));
+//       setUploading(false);
+//     } catch (error) {
+//       console.log(error);
+//       setUploading(false);
+//     }
+//   };
+
+//   const handleSubmit = (e) => {
+//     e.preventDefault();
+//     // console.log(productData);
+//     dispatch(updateProduct({ id, productData }));
+//     navigate("/admin/products");
+//   };
+
+//   if (loading) return <p>Loading..</p>;
+//   if (error) return <p>Error:{error}</p>;
+
+//   return (
+//     <div className="max-w-5xl mx-auto p-6 shadow-md rounded-md">
+//       <h2 className="text-3xl font-bold mb-6">Edit Product</h2>
+//       <form onSubmit={handleSubmit}>
+//         {/* Name */}
+//         <div className="mb-6">
+//           <label className="block font-semibold mb-2">Product Name</label>
+//           <input
+//             type="text"
+//             name="name"
+//             value={productData.name}
+//             onChange={handleChange}
+//             className="w-full border border-gray-300 rounded-md p-2"
+//             required
+//           />
+//         </div>
+//         {/* description */}
+//         <div className="mb-6">
+//           <label className="block font-semibold mb-2">Description</label>
+//           <textarea
+//             name="description"
+//             value={productData.description}
+//             onChange={handleChange}
+//             className="w-full border border-gray-300 rounded-md p-2"
+//             rows={4}
+//             required
+//           />
+//         </div>
+//         {/* price */}
+
+//         <div className="mb-6">
+//           <label className="block font-semibold mb-2">Price</label>
+//           <input
+//             type="number"
+//             name="price"
+//             value={productData.price}
+//             onChange={handleChange}
+//             className="w-full border border-gray-300 rounded-md p-2"
+//           />
+//         </div>
+//         {/* count in stock */}
+//         <div className="mb-6">
+//           <label className="block font-semibold mb-2">Count in stock</label>
+//           <input
+//             type="number"
+//             name="countInStock"
+//             value={productData.countInStock}
+//             onChange={handleChange}
+//             className="w-full border border-gray-300 rounded-md p-2"
+//           />
+//         </div>
+//         {/* sku */}
+//         <div className="mb-6">
+//           <label className="block font-semibold mb-2">SKU</label>
+//           <input
+//             type="text"
+//             name="sku"
+//             value={productData.sku}
+//             onChange={handleChange}
+//             className="w-full border border-gray-300 rounded-md p-2"
+//           />
+//         </div>
+//         {/* sizes */}
+//         <div className="mb-6">
+//           <label className="block font-semibold mb-2">
+//             Sizes(Comma-separated)
+//           </label>
+//           <input
+//             type="text"
+//             name="sizes"
+//             value={productData.sizes.join(",")}
+//             onChange={(e) =>
+//               setProductData({
+//                 ...productData,
+//                 sizes: e.target.value.split(",").map((size) => size.trim()),
+//               })
+//             }
+//             className="w-full border border-gray-300 rounded-md p-2"
+//           />
+//         </div>
+//         {/* colors */}
+//         <div className="mb-6">
+//           <label className="block font-semibold mb-2">
+//             Colors(Comma-separated)
+//           </label>
+//           <input
+//             type="text"
+//             name="colors"
+//             value={productData.colors.join(",")}
+//             onChange={(e) =>
+//               setProductData({
+//                 ...productData,
+//                 colors: e.target.value.split(",").map((color) => color.trim()),
+//               })
+//             }
+//             className="w-full border border-gray-300 rounded-md p-2"
+//           />
+//         </div>
+//         {/* image */}
+//         <div className="mb-6">
+//           <label className="block font-semibold mb-2">Upload Image</label>
+//           <input type="file" onChange={handleImageUpload} />
+//           {uploading && <p>Uploading Image..</p>}
+//           <div className="flex gap-4 mt-4">
+//             {productData.images.map((image, index) => (
+//               <div key={index}>
+//                 <img
+//                   src={image.url}
+//                   alt={image.altText || "Product Image"}
+//                   className="w-20 h-20  object-cover  shadow-md"
+//                 />
+//               </div>
+//             ))}
+//           </div>
+//         </div>
+//         <button
+//           type="submit"
+//           className="w-full bg-green-500 text-white p-2 hover:bg-green-600"
+//         >
+//           Update Product
+//         </button>
+//       </form>
+//     </div>
+//   );
+// };
+
+// export default EditProductPage;

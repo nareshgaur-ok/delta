@@ -104,7 +104,6 @@ router.put("/:id", protect, admin, async (req, res) => {
       product.collection = collection ?? product.collection;
       product.material = material ?? product.material;
       product.gender = gender ?? product.gender;
-      product.images = images ?? product.images;
       product.isFeatured =
         isFeatured !== undefined ? isFeatured : product.isFeatured;
       product.isPublished =

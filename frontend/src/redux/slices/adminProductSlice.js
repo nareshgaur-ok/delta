@@ -48,6 +48,7 @@ export const updateProduct = createAsyncThunk(
         },
       }
     );
+    // console.log("aps51",response.data);
     return response.data;
   }
 );
@@ -92,12 +93,12 @@ const adminProductSlice = createSlice({
       })
       // update product
       .addCase(updateProduct.fulfilled, (state, action) => {
-        const index = state.products.findIndex((product) => {
-          product._id === action.payload._id;
-          if (index !== -1) {
-            state.products[index] = action.payload;
-          }
-        });
+        const index = state.products.findIndex(
+          (product) => product._id === action.payload._id
+        );
+        if (index !== -1) {
+          state.products[index] = action.payload;
+        }
       })
       // delete product
       .addCase(deleteProduct.fulfilled, (state, action) => {

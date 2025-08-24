@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // Async thunk to fetch products by collection and optional features
@@ -36,6 +36,7 @@ export const fetchProductsByFilters = createAsyncThunk(
       `${import.meta.env.VITE_BACKEND_URL}/api/products?${query.toString()}`
     );
 
+    // console.log("ps39",response.data);
     return response.data;
   }
 );
@@ -47,7 +48,6 @@ export const fetchProductDetails = createAsyncThunk(
     const response = await axios.get(
       `${import.meta.env.VITE_BACKEND_URL}/api/products/${id}`
     );
-    // console.log("ps51",response.data)
     return response.data;
   }
 );
@@ -66,6 +66,7 @@ export const updateProduct = createAsyncThunk(
         },
       }
     );
+    console.log("ps69", response.data);
     return response.data;
   }
 );
@@ -159,13 +160,23 @@ const productsSlice = createSlice({
       .addCase(updateProduct.fulfilled, (state, action) => {
         state.loading = false;
         const updatedProduct = action.payload;
+
+        // FIX: compare using _id instead of id
         const index = state.products.findIndex(
-          (product) => product.id === updatedProduct.id
+          (product) => product._id === updatedProduct._id
         );
+
         if (index !== -1) {
+          // ✅ Update the existing product
           state.products[index] = updatedProduct;
+        } else {
+          // ✅ If product not found in state, push it
+          state.products.push(updatedProduct);
         }
+
+        // console.log("ps169 Products after update:", current(state.products));
       })
+
       .addCase(updateProduct.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
@@ -177,6 +188,10 @@ const productsSlice = createSlice({
       .addCase(fetchSimilarProduct.fulfilled, (state, action) => {
         state.loading = false;
         state.similarProducts = action.payload;
+        // console.log(
+        //   "ps182 Products after fetch:",
+        //   current(state.products) // <-- converts proxy to plain JS
+        // );
       })
       .addCase(fetchSimilarProduct.rejected, (state, action) => {
         state.loading = false;

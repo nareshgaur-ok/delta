@@ -79,7 +79,7 @@ router.put("/:id", protect, admin, async (req, res) => {
       images,
     } = req.body;
     const product = await Product.findById(req.params.id);
-    console.log(product);
+    // console.log(product);
     if (product) {
       // update product fields
       product.name = name || product.name;
