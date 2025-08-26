@@ -32,30 +32,30 @@ const CategoryGrid = () => {
 
   const categories = [
     {
-      name: "T-Shirt",
+      name: "Men",
       image: t_shirt_man,
       categoryAddress: "T shirt",
     },
+    // {
+    //   name: "Full Sleeve",
+    //   image: FullSleeveMen,
+    //   categoryAddress: "Round Neck",
+    // },
     {
-      name: "Full Sleeve",
-      image: FullSleeveMen,
-      categoryAddress: "Round Neck",
-    },
-    {
-      name: "Collar T-Shirt",
+      name: "T-Shirt",
       image: collarTShirt,
       categoryAddress: "Collar T-Shirt",
     },
-    {
-      name: "Bottom Wear Men",
-      image:  bottomMen ,
-      categoryAddress: "Bottom Wear Men",
-    },
-    {
-      name: "Women",
-      image: "https://picsum.photos/500/500?random=5",
-      categoryAddress: "Women",
-    },
+    // {
+    //   name: "Bottom Wear Men",
+    //   image:  bottomMen ,
+    //   categoryAddress: "Bottom Wear Men",
+    // },
+    // {
+    //   name: "Women",
+    //   image: "https://picsum.photos/500/500?random=5",
+    //   categoryAddress: "Women",
+    // },
     {
       name: "Jackets",
       image: jacketMen,
@@ -83,48 +83,55 @@ const CategoryGrid = () => {
     },
   ];
 
-  return (
-    <div className="max-w-screen-xl mx-auto px-4 py-2">
-      {/* Search Input */}
-      <form onSubmit={handleSearch}>
-        <div className="mb-6">
-          <input
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-            }}
-            type="text"
-            placeholder="Search categories..."
-            className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
-          />
-        </div>
-      </form>
+  
+return (
+  <div className="max-w-screen-xl mx-auto px-4 py-6">
+    {/* Search Input */}
+    <form onSubmit={handleSearch} className="mb-8 sticky top-0 bg-white z-10">
+      <div className="flex items-center shadow-sm border rounded-lg overflow-hidden">
+        <input
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          type="text"
+          placeholder="Search categories..."
+          className="w-full p-3 text-gray-700 focus:outline-none"
+        />
+        <button
+          type="submit"
+          className="px-4 py-3 bg-black text-white font-medium hover:bg-gray-800 transition"
+        >
+          Search
+        </button>
+      </div>
+    </form>
 
-      {/* Scrollable Row */}
-      <div className="overflow-x-auto">
-        <div className="flex space-x-6">
-          {categories.map((cat, idx) => (
-            <Link
-              key={idx}
-              to={`/collections/all/?search=${cat.categoryAddress}`}
-              className="flex flex-col items-center min-w-[100px] group"
-            >
-              <div className="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden border border-gray-300 shadow-sm group-hover:border-black transition">
-                <img
-                  src={cat.image}
-                  alt={cat.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <span className="mt-2 text-sm font-medium text-gray-800 group-hover:text-black transition text-center">
-                {cat.name}
-              </span>
-            </Link>
-          ))}
-        </div>
+    {/* Categories */}
+    <div className="overflow-x-auto lg:overflow-visible">
+      <div className="flex space-x-6 lg:grid lg:grid-cols-5 lg:gap-8">
+        {categories.map((cat, idx) => (
+          <Link
+            key={idx}
+            to={`/collections/all`}
+            className="flex flex-col items-center flex-shrink-0 group"
+          >
+            <div className="w-28 h-28 rounded-full overflow-hidden border border-gray-200 shadow-md transform transition duration-300 group-hover:scale-105 group-hover:shadow-lg flex items-center justify-center">
+              <img
+                src={cat.image}
+                alt={cat.name}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <span className="mt-3 text-sm font-medium text-gray-700 group-hover:text-black group-hover:font-semibold transition text-center">
+              {cat.name}
+            </span>
+          </Link>
+        ))}
       </div>
     </div>
-  );
+  </div>
+);
+
+
 };
 
 export default CategoryGrid;

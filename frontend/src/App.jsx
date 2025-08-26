@@ -21,6 +21,11 @@ import OrderManagement from "./components/Admin/OrderManagement";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 import ProtectedRoutes from "./components/common/ProtectedRoutes";
+import ContactUs from "./pages/ContactUs";
+import AboutUs from "./pages/AboutUs";
+import PrivacyPolicy from "./pages/Privacy Policy";
+import CancellationRefund from "./pages/cancellationAndReturn";
+import TermsAndConditions from "./pages/TermsAndConditions";
 
 const App = () => {
   return (
@@ -36,6 +41,11 @@ const App = () => {
             <Route path="collections/:collection" element={<Collection />} />
             <Route path="product/:id" element={<ProductDetails />} />
             <Route path="checkout" element={<Checkout />} />
+            <Route path="contactUs" element={<ContactUs />} />
+            <Route path="aboutUs" element={<AboutUs />} />
+            <Route path="privacyPolicy" element={<PrivacyPolicy />} />
+            <Route path="cancellationRefund" element={<CancellationRefund />} />
+            <Route path="termsAndConditions" element={<TermsAndConditions />} />
             <Route
               path="order-confirmation"
               element={<OrderConfirmationPage />}

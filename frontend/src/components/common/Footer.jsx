@@ -39,22 +39,22 @@ const Footer = () => {
           <h3 className="text-lg text-gray-800 mb-4">Shop</h3>
           <ul className="space-y-2 text-gray-600">
             <li>
-              <Link to="/collections/all?category=Top+Wear&gender=Men" className="hover:text-gray-600 transition-colors">
+              <Link to="/collections/all" className="hover:text-gray-600 transition-colors">
                 Men's top wear
               </Link>
             </li>
             <li>
-              <Link to="#" className="hover:text-gray-600 transition-colors">
+              <Link to="/collections/all" className="hover:text-gray-600 transition-colors">
                 Women's top wear
               </Link>
             </li>
             <li>
-              <Link to="#" className="hover:text-gray-600 transition-colors">
+              <Link to="/collections/all" className="hover:text-gray-600 transition-colors">
                 Men's bottom wear
               </Link>
             </li>
             <li>
-              <Link to="#" className="hover:text-gray-600 transition-colors">
+              <Link to="/collections/all" className="hover:text-gray-600 transition-colors">
                 Women's bottom wear
               </Link>
             </li>
@@ -66,12 +66,12 @@ const Footer = () => {
           <h3 className="text-lg text-gray-800 mb-4">Support</h3>
           <ul className="space-y-2 text-gray-600">
             <li>
-              <Link to="#" className="hover:text-gray-600 transition-colors">
+              <Link to="/contactUs/" className="hover:text-gray-600 transition-colors">
                 Contact us
               </Link>
             </li>
             <li>
-              <Link to="#" className="hover:text-gray-600 transition-colors">
+              <Link to="aboutUs" className="hover:text-gray-600 transition-colors">
                 About us
               </Link>
             </li>
@@ -81,7 +81,7 @@ const Footer = () => {
               </Link>
             </li>
             <li>
-              <Link to="#" className="hover:text-gray-600 transition-colors">
+              <Link to="/collections/all" className="hover:text-gray-600 transition-colors">
                 Features
               </Link>
             </li>
@@ -121,17 +121,29 @@ const Footer = () => {
           <p className="text-gray-500">Call us</p>
           <p>
             <FiPhoneCall className="inline-block mr-2" />
-            1231423
+            9176283115
           </p>
         </div>
       </div>
       {/* footer bottom */}
 
-      <div className="container mx-auto mt-12 px-4 lg:px-0 border-t border-gray-200 pt-6">
+      <div className="flex justify-between container mx-auto mt-12 px-4 lg:px-0 border-t border-gray-200 pt-2">
         <p className="text-gray-500 text-sm tracking-tighter text-center">
-          &copy; 2025, Rabbit , All rights reserved
+          &copy; 2025, Nmart , All rights reserved
         </p>
+        <div>
+        <a href="/privacyPolicy" className="text-gray-500 text-sm tracking-tighter text-center">
+          Privacy and policy
+        </a>{" "}
+        <a href="/cancellationRefund" className="text-gray-500 text-sm tracking-tighter text-center">
+          Return Policy
+        </a>{" "}
+        <a href="/termsAndConditions" className="text-gray-500 text-sm tracking-tighter text-center">
+          Terms Conditions
+        </a>
       </div>
+      </div>
+      
     </footer>
   );
 };
