@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(
   cors({
 
-    origin: ["https://bazar-navy.vercel.app/"],
+    origin: ["https://bazar-chi-ten.vercel.app"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   })
