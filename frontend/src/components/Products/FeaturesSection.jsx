@@ -16,7 +16,7 @@ const FeaturesSection = () => {
           </div>
           <h4 className="tracking-tighter mb-2">Free national shipping</h4>
           <p className="text-gray-600 text-sm tracking-tighter">
-            On al orders over Rs100
+            On al orders over Rs1000
           </p>
         </div>
         {/* feature 2 */}
@@ -25,7 +25,7 @@ const FeaturesSection = () => {
           <div className="p-4 rounded-full mb-4">
             <HiArrowsExpand className="text-xl" />
           </div>
-          <h4 className="tracking-tighter mb-2">10 DAYS RETURN</h4>
+          <h4 className="tracking-tighter mb-2">7 DAYS RETURN</h4>
           <p className="text-gray-600 text-sm tracking-tighter">
             MONEY BACK GUARANTEE
           </p>
