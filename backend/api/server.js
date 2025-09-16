@@ -2,6 +2,7 @@ const dotenv = require("dotenv");
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("../config/db");
+const cron = require("node-cron"); 
 const userRoutes = require("../routes/userRoutes");
 const productRoutes = require("../routes/productRoutes");
 const cartRoutes = require("../routes/cartRoutes");
@@ -48,6 +49,21 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api/admin/users", adminRoutes);
 app.use("/api/admin/products", productAdminRoutes);
 app.use("/api/admin/orders", adminOrderRoutes);
+
+// Cron Job to Ping the Server (HTTP Request)
+cron.schedule('*/5 * * * *', async () => { // Runs every 5 minutes
+  try {
+    // Send an HTTP request to your server's endpoint to keep it alive
+    const response = await axios.get(`https://metafit-services-5skv.onrender.com/ping`);
+  } catch (error) {
+  }
+});
+
+// Define a simple ping route to respond to the cron job request
+app.get('/ping', (req, res) => {
+  res.status(200).send('Server is alive!');
+});
+
 
 app.listen(PORT, () => {
   console.log(
