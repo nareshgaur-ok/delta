@@ -68,7 +68,10 @@ const AddProduct = () => {
 
   const handleColorChange = (index, field, value) => {
     const updatedColors = productData.colors.map((color, i) =>
-      i === index ? { ...color, [field]: value } : color
+      i === index ?  {
+        ...color,
+        [field]: field === "code" ? `#${value}` : value,
+      }:color
     );
     // console.log("f74",updatedColors)
     setProductData((prev) => ({ ...prev, colors: updatedColors }));

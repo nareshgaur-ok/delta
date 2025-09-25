@@ -32,6 +32,7 @@ router.post("/", protect, admin, async (req, res) => {
       sizes,
       colors,
       collection,
+      material,
       gender,
     } = req.body;
     // console.log("Incoming product data:", req.body);
@@ -48,6 +49,7 @@ router.post("/", protect, admin, async (req, res) => {
       sizes,
       colors,
       collection,
+      material,
       gender,
       user: req.user._id,
     });
