@@ -1,5 +1,6 @@
 const dotenv = require("dotenv");
 const express = require("express");
+const axios = require('axios');
 const cors = require("cors");
 const connectDB = require("../config/db");
 const cron = require("node-cron"); 
@@ -49,6 +50,7 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api/admin/users", adminRoutes);
 app.use("/api/admin/products", productAdminRoutes);
 app.use("/api/admin/orders", adminOrderRoutes);
+app.use("/api/admin/addProducts", productAdminRoutes);
 
 // Cron Job to Ping the Server (HTTP Request)
 cron.schedule('*/5 * * * *', async () => { // Runs every 5 minutes

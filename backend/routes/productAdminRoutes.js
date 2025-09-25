@@ -33,25 +33,25 @@ router.post("/", protect, admin, async (req, res) => {
       colors,
       collection,
       gender,
-      images,
     } = req.body;
+    // console.log("Incoming product data:", req.body);
+
     const newProducts = await Product.create({
       name,
       description,
-      price,
-      discountPrice,
-      countInStock,
-      sku,
+      price: Number(price),
+      discountPrice: Number(discountPrice),
+      countInStock: Number(countInStock),
+      sku: Number(sku),
       category,
       brand,
       sizes,
       colors,
       collection,
       gender,
-      images,
       user: req.user._id,
     });
-
+    // console.log("vg54", newProducts);
     res.status(201).json(newProducts);
   } catch (error) {
     console.error("Error creating product", error);

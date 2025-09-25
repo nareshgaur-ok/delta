@@ -26,6 +26,7 @@ import AboutUs from "./pages/AboutUs";
 import PrivacyPolicy from "./pages/Privacy Policy";
 import CancellationRefund from "./pages/cancellationAndReturn";
 import TermsAndConditions from "./pages/TermsAndConditions";
+import AddProduct from "./components/Admin/AddProduct";
 
 const App = () => {
   return (
@@ -66,6 +67,7 @@ const App = () => {
             <Route path="products" element={<ProductManagement />} />
             <Route path="products/:id/edit" element={<EditProductPage />} />
             <Route path="orders" element={<OrderManagement />} />
+            <Route path="addProduct" element={<AddProduct />} />
           </Route>
         </Routes>
       </BrowserRouter>

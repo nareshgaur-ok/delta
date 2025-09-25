@@ -49,21 +49,6 @@ const productSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    metaTile: {
-      type: String,
-    },
-    metaDescription: {
-      type: String,
-    },
-    metaKeywords: {
-      type: String,
-    },
-    dimensions: {
-      length: Number,
-      width: Number,
-      height: Number,
-    },
-    weight: Number,
   },
   { timestamps: true }
 );
