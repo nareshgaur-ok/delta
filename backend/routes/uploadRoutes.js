@@ -20,20 +20,31 @@ const upload = multer({ storage });
 
 router.post("/", upload.single("image"), async (req, res) => {
   try {
-    if (!req.file) { // upload ka data ko req.file se access kar sakate he
+    if (!req.file) {
+      // upload ka data ko req.file se access kar sakate he
       res.status(404).json({ message: "No file uploaded" });
     }
 
     // function to handle the stream upload to cloudinary
     const streamUpload = (fileBuffer) => {
       return new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream((error, result) => {
-          if (result) {
-            resolve(result);
-          } else {
-            reject(error);
+        const stream = cloudinary.uploader.upload_stream(
+          {
+            folder: "ecommerce_products",
+            transformation: [
+              { width: 800, height: 800, crop: "limit" }, // resize to max 800x800
+              { quality: "auto" }, // auto compress
+              { fetch_format: "auto" }, // convert to optimal format (webp/jpeg)
+            ],
+          },
+          (error, result) => {
+            if (result) {
+              resolve(result);
+            } else {
+              reject(error);
+            }
           }
-        });
+        );
         //Use streamifier to convert file buffer to a stream
         streamifier.createReadStream(fileBuffer).pipe(stream);
         // console.log("upload39",fileBuffer);
