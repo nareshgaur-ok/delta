@@ -10,9 +10,9 @@ const Hero = () => {
         className="w-full h-auto md:h-[600px] lg:h-[750px] object-cover"
       />
       <div className="absolute inset-0 bg-black bg-opacity-20 flex flex-col items-center justify-center text-center p-6">
-        <h1 className="text-white text-xl md:text-5xl font-bold mb-4 max-w-3xl mt-8">
+        {/* <h1 className="text-white text-xl md:text-5xl font-bold mb-4 max-w-3xl mt-8">
           Reliable & Efficient Air <br/> Compressors for Your Business
-        </h1>
+        </h1> */}
         {/* <p className="text-white text-lg md:text-xl mb-6 max-w-xl">
           Quality products with exceptional service to keep your operations running smoothly.
         </p> */}
