@@ -1,12 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import login from "../assets/login.webp";
-import { loginUser } from "../redux/slices/authSlice";
+import { loginUser, googleLoginUserThunk} from "../redux/slices/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 import { mergeCart } from "../redux/slices/cartSlice";
+import { GoogleLogin } from "@react-oauth/google";
+
+// 992439140707-ot4ddhp5qos396lv63902i7kvot9r000.apps.googleusercontent.com
 
 const Login = () => {
+  
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
@@ -35,6 +40,35 @@ const Login = () => {
     e.preventDefault();
     // console.log("user Login:", { email, password });
     dispatch(loginUser({ email, password }));
+  };
+
+
+  const handleGoogleLoginSuccess = async (credentialResponse) => {
+  try {
+    // Dispatch the Google login thunk and wait for it to complete
+    const resAction = await dispatch(googleLoginUserThunk(credentialResponse));
+
+    if (googleLoginUserThunk.fulfilled.match(resAction)) {
+      // Login successful
+      const loggedInUser = resAction.payload;
+
+      // Redirect to checkout or homepage
+      navigate(isCheckoutRedirect ? "/checkout" : "/");
+    } else {
+      // Login failed
+      console.error("Google login failed:", resAction.payload);
+      alert("Google login failed ❌");
+    }
+  } catch (err) {
+    console.error("Google login error:", err);
+    alert("Google login failed ❌");
+  }
+};
+
+// Google login error
+  const handleGoogleLoginError = () => {
+    console.error("Google login failed");
+    alert("Google login failed ❌");
   };
 
   return (
@@ -79,6 +113,15 @@ const Login = () => {
           >
             Sign in
           </button>
+
+          {/* Google Login Button */}
+          <div className="mt-4 flex justify-center">
+            <GoogleLogin
+              onSuccess={handleGoogleLoginSuccess}
+              onError={handleGoogleLoginError}
+            />
+          </div>
+
           <p className="mt-6 text-center text-sm">
             Don&apos;t have an account?
             <Link

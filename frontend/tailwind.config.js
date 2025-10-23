@@ -7,7 +7,12 @@ export default {
   theme: {
     extend: {
       colors:{
-        "rabbit-red":"#ea2e0e"
+        "rabbit-red":"#ea2e0e",
+        "primary":"#3238f2"
+      },
+      fontFamily:{
+        "display":["Poppins","sans-serif"],
+        "body":["Inter","sans-serif"],
       }
     },
   },

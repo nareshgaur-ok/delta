@@ -84,7 +84,7 @@ const CartContents = ({ cart, userId, guestId }) => {
           </div>
 
           <div>
-            <p>{product.discountPrice.toLocaleString()}</p>
+            <p>{product.discountPrice?.toLocaleString()}</p>
             <button
               onClick={() => {
                 handleRemoveFromCart(

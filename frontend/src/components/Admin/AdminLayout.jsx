@@ -12,7 +12,7 @@ const AdminLayout = () => {
   return (
     <div className="min-h-screen flex flex-col md:flex-row relative">
       {/* mobile togglebutton */}
-      <div className="flex md:hidden p-4 bg-gray-900 text-white z-20">
+      <div className="flex md:hidden p-4 bg-gray-900 text-white ">
         <button onClick={toggleSidebar}>
           <FaBars size={24} />
         </button>
