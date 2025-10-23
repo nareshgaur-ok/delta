@@ -35,7 +35,7 @@ const Footer = () => {
         </div>
 
         {/* shop link */}
-        <div>
+        {/* <div>
           <h3 className="text-lg text-gray-800 mb-4">Shop</h3>
           <ul className="space-y-2 text-gray-600">
             <li>
@@ -59,7 +59,7 @@ const Footer = () => {
               </Link>
             </li>
           </ul>
-        </div>
+        </div> */}
 
         {/* support links */}
         <div>
@@ -129,7 +129,7 @@ const Footer = () => {
 
       <div className="flex justify-between container mx-auto mt-12 px-4 lg:px-0 border-t border-gray-200 pt-2">
         <p className="text-gray-500 text-sm tracking-tighter text-center">
-          &copy; 2025, Nmart , All rights reserved
+         © {new Date().getFullYear()} Delta Compressors. All rights reserved.
         </p>
         <div>
         <a href="/privacyPolicy" className="text-gray-500 text-sm tracking-tighter text-center">
