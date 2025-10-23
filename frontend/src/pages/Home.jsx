@@ -4,7 +4,7 @@ import NewArrivals from "../components/Products/NewArrivals";
 import { useDispatch } from "react-redux"; 
 import { fetchProductsByFilters } from "../redux/slices/productSlice";                       
 import axios from "axios";
-import { useEffect} from "react";
+import { useEffect } from "react";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -39,6 +39,8 @@ const Home = () => {
       <Hero />
       <GenderCollectionSection />
       <NewArrivals />
+      
+      
     </div>
   );
 };

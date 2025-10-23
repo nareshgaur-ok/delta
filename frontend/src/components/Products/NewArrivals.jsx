@@ -10,22 +10,31 @@ import vacuumImg from "../../assets/delta2.png";
 import logoFesto from "../../assets/delta3.png";
 import logoCraftman from "../../assets/delta1.jpg";
 import logoTimber from "../../assets/delta2.png";
+import FeaturesSection from "./FeaturesSection";
+import AOS from "aos";
+import "aos/dist/aos.css";
+import { useEffect } from "react";
 
 const ProductSection = ({ title, description, image, link }) => (
-  <section className="flex flex-col md:flex-row items-center my-12 md:my-20 gap-8 max-w-7xl mx-auto px-4">
-    <div className="md:w-1/2">
+  <section
+    className="flex flex-col md:flex-row items-center my-12 md:my-20 gap-8 max-w-7xl mx-auto px-4 transition-all duration-500"
+    data-aos="fade-up"
+  >
+    <div className="md:w-1/2 overflow-hidden rounded-lg shadow-lg">
       <img
         src={image}
         alt={title}
-        className="rounded-lg shadow-lg w-full object-cover"
+        className="rounded-lg w-full object-cover transform hover:scale-105 transition-transform duration-700 ease-out"
       />
     </div>
     <div className="md:w-1/2 space-y-6">
-      <h2 className="text-3xl font-bold text-gray-900">{title}</h2>
+      <h2 className="text-3xl font-bold text-gray-900 hover:text-blue-600 transition-colors duration-300">
+        {title}
+      </h2>
       <p className="text-gray-700 leading-relaxed">{description}</p>
       <a
         href={link}
-        className="inline-block bg-blue-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-blue-700 transition"
+        className="inline-block bg-blue-600 text-white px-6 py-3 rounded-md font-semibold transition-all duration-300 hover:bg-blue-700 hover:shadow-lg hover:scale-105"
       >
         VIEW PRODUCTS
       </a>
@@ -34,28 +43,40 @@ const ProductSection = ({ title, description, image, link }) => (
 );
 
 const ProductSection1 = ({ title, description, image, link }) => (
-  <section className="flex flex-col md:flex-row items-center my-12 md:my-20 gap-8 max-w-7xl mx-auto px-4">
+  <section
+    className="flex flex-col md:flex-row items-center my-12 md:my-20 gap-8 max-w-7xl mx-auto px-4 transition-all duration-500"
+    data-aos="fade-up"
+  >
     <div className="md:w-1/2 space-y-6">
-      <h2 className="text-3xl font-bold text-gray-900">{title}</h2>
+      <h2 className="text-3xl font-bold text-gray-900 hover:text-blue-600 transition-colors duration-300">
+        {title}
+      </h2>
       <p className="text-gray-700 leading-relaxed">{description}</p>
       <a
         href={link}
-        className="inline-block bg-blue-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-blue-700 transition"
+        className="inline-block bg-blue-600 text-white px-6 py-3 rounded-md font-semibold transition-all duration-300 hover:bg-blue-700 hover:shadow-lg hover:scale-105"
       >
         VIEW PRODUCTS
       </a>
     </div>
-    <div className="md:w-1/2">
+    <div className="md:w-1/2 overflow-hidden rounded-lg shadow-lg">
       <img
         src={image}
         alt={title}
-        className="rounded-lg shadow-lg w-full object-cover"
+        className="rounded-lg w-full object-cover transform hover:scale-105 transition-transform duration-700 ease-out"
       />
     </div>
   </section>
 );
 
 const HomePage = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // animation duration in ms
+      once: true, // animate only once
+    });
+  }, []);
+
   return (
     <div className="font-sans bg-gray-50 text-gray-900">
       {/* Product Sections */}
@@ -71,25 +92,28 @@ const HomePage = () => {
         image={portableImg}
         link="/collections/portable"
       />
-<div className="flex flex-col md:flex-row md:space-x-6 space-y-6 md:space-y-0">
-  <div className="md:w-1/2">
-    <ProductSection
-      title="MEDICAL AIR COMPRESSORS & VACUUM PUMPS"
-      description="Pattons Medical sells medical scroll compressors, vacuum pumps, driers and other medical gas equipment. For more information you can visit the website."
-      image={medicalImg}
-      link="/collections/medical"
-    />
-  </div>
 
-  <div className="md:w-1/2">
-    <ProductSection1
-      title="VACUUM PUMPS"
-      description="In today’s advanced industrial landscape, vacuum systems are indispensable, supporting a vast range of applications that demand precision, cleanliness, and control. ELGi’s vacuum solutions are engineered to bring powerful, reliable performance to facilities worldwide, ensuring that critical applications can operate seamlessly and efficiently."
-      image={vacuumImg}
-      link="/collections/vacuum"
-    />
-  </div>
-</div>
+      <FeaturesSection />
+
+      <div className="flex flex-col md:flex-row md:space-x-6 space-y-6 md:space-y-0">
+        <div className="md:w-1/2">
+          <ProductSection
+            title="MEDICAL AIR COMPRESSORS & VACUUM PUMPS"
+            description="Pattons Medical sells medical scroll compressors, vacuum pumps, driers and other medical gas equipment. For more information you can visit the website."
+            image={medicalImg}
+            link="/collections/medical"
+          />
+        </div>
+
+        <div className="md:w-1/2">
+          <ProductSection1
+            title="VACUUM PUMPS"
+            description="In today’s advanced industrial landscape, vacuum systems are indispensable, supporting a vast range of applications that demand precision, cleanliness, and control. ELGi’s vacuum solutions are engineered to bring powerful, reliable performance to facilities worldwide, ensuring that critical applications can operate seamlessly and efficiently."
+            image={vacuumImg}
+            link="/collections/vacuum"
+          />
+        </div>
+      </div>
 
       <ProductSection
         title="OIL FREE COMPRESSORS"
@@ -117,7 +141,10 @@ const HomePage = () => {
       />
 
       {/* Global Footprint */}
-      <section className="bg-white py-12 px-6 text-center max-w-5xl mx-auto">
+      <section
+        className="bg-white py-12 px-6 text-center max-w-5xl mx-auto"
+        data-aos="fade-in"
+      >
         <h2 className="text-3xl font-bold mb-8">FOLLOW OUR GLOBAL FOOTPRINT</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-gray-800 text-lg font-semibold">
           <div>
@@ -133,7 +160,10 @@ const HomePage = () => {
       </section>
 
       {/* Trusted Brands */}
-      <section className="bg-gray-100 py-12 px-6 max-w-5xl mx-auto text-center">
+      <section
+        className="bg-gray-100 py-12 px-6 max-w-5xl mx-auto text-center"
+        data-aos="zoom-in"
+      >
         <h2 className="text-3xl font-bold mb-8">
           BRANDS THAT HAVE TRUSTED US OVER THE YEARS
         </h2>
@@ -149,7 +179,7 @@ const HomePage = () => {
       </section>
 
       {/* News */}
-      <section className="max-w-5xl mx-auto px-6 py-12">
+      <section className="max-w-5xl mx-auto px-6 py-12" data-aos="fade-right">
         <h2 className="text-3xl font-bold mb-8">NEWS & EVENTS</h2>
         <ul className="space-y-4 text-gray-700 font-medium">
           <li>
