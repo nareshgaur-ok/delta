@@ -13,7 +13,7 @@ const Hero = () => {
         <h1 className="text-white text-xl md:text-5xl font-bold mb-4 max-w-3xl mt-8">
           Reliable & Efficient Air <br/> Compressors for Your Business
         </h1> 
-         <p className="text-white text-lg md:text-xl mb-6 max-w-xl">
+         <p className="hidden md:block text-white text-lg md:text-xl mb-6 max-w-xl">
           Quality products with exceptional service to keep your operations running smoothly.
         </p> 
          <Link
