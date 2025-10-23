@@ -32,36 +32,9 @@ const Navbar = () => {
       <nav className="container mx-auto flex items-center justify-between py-4 px-6 ">
         <div>
           <Link to="/" className="text-2xl font-medium">
-            N{" "} Bazar
-          </Link>
+            Delta          </Link>
         </div>
-        {/* // center navigation */}
-        <div className="hidden md:flex space-x-6 ">
-          <Link
-            to="/collections/all?gender=Men"
-            className="text-gray-700 hover:text-black text-sm font-medium uppercase"
-          >
-            Men
-          </Link>
-          <Link
-            to="/collections/all?gender=Women"
-            className="text-gray-700 hover:text-black text-sm font-medium uppercase"
-          >
-            Women
-          </Link>
-          <Link
-            to="/collections/all?category=Top Wear"
-            className="text-gray-700 hover:text-black text-sm font-medium uppercase"
-          >
-            Top Wear
-          </Link>
-          <Link
-            to="/collections/all?category=Bottom Wear"
-            className="text-gray-700 hover:text-black text-sm font-medium uppercase"
-          >
-            Bottom Wear
-          </Link>
-        </div>
+        
         {/* right icons */}
         <div className="flex items-center space-x-4">
           {user && user.role === "admin" && (
@@ -78,7 +51,7 @@ const Navbar = () => {
           </Link>
 
           {/* cart-button */}
-          <button
+          {/* <button
             onClick={togglerCartOpen}
             className="relative hover:text-black"
           >
@@ -88,7 +61,7 @@ const Navbar = () => {
                 {cartItemCount}
               </span>
             )}
-          </button>
+          </button> */}
 
           {/* search */}
           <div className="overflow-hidden">

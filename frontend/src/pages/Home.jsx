@@ -4,7 +4,6 @@ import GenderCollectionSection from "../components/Products/GenderCollectionSect
 import NewArrivals from "../components/Products/NewArrivals";
 import ProductDetails from "../components/Products/ProductDetails";
 import ProductGrid from "../components/Products/ProductGrid";
-import CategoryGrid from "../components/Products/categoryGrid";
 import FeaturedCollection from "../components/Products/featuredCollection";
 import { useDispatch, useSelector } from "react-redux"; 
 import { fetchProductsByFilters } from "../redux/slices/productSlice";                       
@@ -44,7 +43,6 @@ const Home = () => {
   return (
     <div>
       <Hero />
-      <CategoryGrid/>
       <GenderCollectionSection />
       <NewArrivals />
       {/* best seller */}
