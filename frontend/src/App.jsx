@@ -3,7 +3,6 @@ import UserLayout from "./components/Layout/UserLayout";
 import Home from "./pages/Home";
 import { Toaster } from "sonner";
 import Login from "./pages/Login";
-import Food from "./pages/Food";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import Collection from "./pages/CollectionPage";
@@ -28,7 +27,6 @@ import PrivacyPolicy from "./pages/Privacy Policy";
 import CancellationRefund from "./pages/cancellationAndReturn";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import AddProduct from "./components/Admin/AddProduct";
-import OwnerLayout from "./components/Owner/OwnerLayout";
 
 const App = () => {
   return (
@@ -39,7 +37,6 @@ const App = () => {
           <Route path="/" element={<UserLayout />}>
             <Route index element={<Home />} />
             <Route path="login" element={<Login />} />
-            <Route path="food" element={<Food />} />
             <Route path="register" element={<Register />} />
             <Route path="profile" element={<Profile />} />
             <Route path="collections/:collection" element={<Collection />} />
@@ -73,9 +70,6 @@ const App = () => {
             <Route path="addProduct" element={<AddProduct />} />
           </Route>
 
-          <Route path="/owner" element={<OwnerLayout />}>
-            <Route> </Route>
-          </Route>
         </Routes>
       </BrowserRouter>
     </Provider>

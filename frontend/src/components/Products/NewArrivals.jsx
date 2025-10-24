@@ -1,8 +1,9 @@
-import oilLubricatedImg from "../../assets/delta1.jpg";
 import portableImg from "../../assets/delta2.png";
 import oilFreeImg from "../../assets/delta3.png";
-import accessoriesImg from "../../assets/delta1.jpg";
-import heatRecoveryImg from "../../assets/delta2.png";
+import delta3 from "../../assets/delta3.png";
+import delta5 from "../../assets/delta5.png";
+import accessoriesImg from "../../assets/delta4.png";
+import delta4 from "../../assets/delta4.png";
 import railwayImg from "../../assets/delta3.png";
 import medicalImg from "../../assets/delta1.jpg";
 import vacuumImg from "../../assets/delta2.png";
@@ -15,32 +16,37 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { useEffect } from "react";
 
+
+
 const ProductSection = ({ title, description, image, link }) => (
   <section
-    className="flex flex-col md:flex-row items-center my-12 md:my-20 gap-8 max-w-7xl mx-auto px-4 transition-all duration-500"
+    className="flex flex-col md:flex-row items-center my-16 md:my-28 gap-10 max-w-7xl mx-auto px-6 py-12 bg-white rounded-xl shadow-2xl transition-all duration-500"
     data-aos="fade-up"
   >
-    <div className="md:w-1/2 overflow-hidden rounded-lg shadow-lg">
+    <div className="md:w-1/2 w-full h-96 md:h-auto flex-shrink-0 overflow-hidden rounded-xl shadow-xl">
       <img
         src={image}
         alt={title}
-        className="rounded-lg w-full object-cover transform hover:scale-105 transition-transform duration-700 ease-out"
+        className="rounded-xl w-full h-full object-cover transform hover:scale-105 transition-transform duration-700 ease-out"
       />
     </div>
-    <div className="md:w-1/2 space-y-6">
-      <h2 className="text-3xl font-bold text-gray-900 hover:text-blue-600 transition-colors duration-300">
+    <div className="md:w-1/2 w-full space-y-8 p-4">
+      <h2 className="text-4xl font-extrabold text-gray-900 hover:text-blue-700 transition-colors duration-300 leading-tight">
         {title}
       </h2>
-      <p className="text-gray-700 leading-relaxed">{description}</p>
+      <p className="text-gray-700 text-lg leading-relaxed">{description}</p>
       <a
         href={link}
-        className="inline-block bg-blue-600 text-white px-6 py-3 rounded-md font-semibold transition-all duration-300 hover:bg-blue-700 hover:shadow-lg hover:scale-105"
+        className="inline-block bg-blue-600 text-white px-8 py-4 rounded-full font-bold text-lg tracking-wide transition-all duration-300 hover:bg-blue-700 hover:shadow-xl hover:scale-105 transform ease-in-out"
       >
-        VIEW PRODUCTS
+        Ask Me for price
       </a>
     </div>
   </section>
 );
+
+
+
 
 const ProductSection1 = ({ title, description, image, link }) => (
   <section
@@ -56,7 +62,7 @@ const ProductSection1 = ({ title, description, image, link }) => (
         href={link}
         className="inline-block bg-blue-600 text-white px-6 py-3 rounded-md font-semibold transition-all duration-300 hover:bg-blue-700 hover:shadow-lg hover:scale-105"
       >
-        VIEW PRODUCTS
+        CALL US
       </a>
     </div>
     <div className="md:w-1/2 overflow-hidden rounded-lg shadow-lg">
@@ -81,9 +87,9 @@ const HomePage = () => {
     <div className="font-sans bg-gray-50 text-gray-900">
       {/* Product Sections */}
       <ProductSection
-        title="OIL LUBRICATED COMPRESSORS"
+        title="OIL FLOODED SCREW AIR COMPRESSORS"
         description="Oil lubricated compressors from ELGi are the backbone of varied industrial applications. The oil lubricated range of compressors offer cost-effective, long-lasting compressed air solutions suitable for light to heavy duty industrial applications."
-        image={oilLubricatedImg}
+        image={delta4}
         link="/contactUs"
       />
       <ProductSection1
@@ -94,6 +100,54 @@ const HomePage = () => {
       />
 
       <FeaturesSection />
+
+
+    
+    <section
+      className="flex flex-col lg:flex-row items-center justify-between my-16 md:my-24 max-w-7xl mx-auto px-6 py-12 bg-gray-50 rounded-2xl shadow-xl border-t-4 border-blue-600 transition-all duration-500"
+      data-aos="fade-up" // Assuming you are using an AOS library
+    >
+      {/* Content Block */}
+      <div className="lg:w-1/2 w-full space-y-6 lg:pr-12 order-2 lg:order-1">
+        <div className="bg-blue-600 inline-block px-4 py-2 rounded-lg">
+          <h2 className="text-3xl font-bold text-white">
+            Optimized Controller
+          </h2>
+        </div>
+        
+        <p className="text-gray-700 text-lg leading-relaxed">
+          The heart of our compressor is an advanced **LCD Touch Screen Display** with a standard key pad and an integrated **Microcontroller**.
+        </p>
+
+        <ul className="text-gray-600 space-y-3 list-disc list-inside ml-4">
+          <li>
+            **Microcomputer Control:** Ensures precise control and regulation of all critical parameters.
+          </li>
+          <li>
+            **Self-Detection & Protection:** Built-in functions for immediate fault detection and safety protection.
+          </li>
+          <li>
+            **Service Management:** Provides a **service schedule** reminder to ensure long-term, optimal performance.
+          </li>
+          <li>
+            **Advanced Reporting:** Features **alarm shutdown** at long intervals of unloading and a comprehensive **fault report** system.
+          </li>
+        </ul>
+      </div>
+
+      {/* Image Block */}
+      <div className="lg:w-1/2 w-full flex justify-center items-center mb-8 lg:mb-0 order-1 lg:order-2">
+        <div className="p-6 bg-white rounded-xl shadow-2xl transform hover:scale-[1.02] transition-transform duration-500">
+          <img
+            src={delta5}
+            alt="Optimized Air Compressor Controller Display"
+            className="w-full max-w-xl h-auto object-contain rounded-md border border-gray-200"
+          />
+        </div>
+      </div>
+    </section>
+  
+
 
       <div className="flex flex-col md:flex-row md:space-x-6 space-y-6 md:space-y-0">
         <div className="md:w-1/2">
@@ -130,8 +184,8 @@ const HomePage = () => {
       <ProductSection
         title="HEAT RECOVERY SYSTEMS"
         description="The ELGi heat recovery system (HRS) helps companies recover approximately 96% of heat generated during the compression process. The heat can then be utilised for warming the ambient air or water. It eliminates the need for additional heating equipment, thereby becoming an energy saving device and contributing to lower CO2 emissions."
-        image={heatRecoveryImg}
-        link="/collections/heat-recovery"
+        image={delta4}
+        link="/"
       />
       <ProductSection1
         title="RAILWAY COMPRESSORS"
