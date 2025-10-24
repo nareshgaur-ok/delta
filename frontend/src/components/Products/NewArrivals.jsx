@@ -3,6 +3,7 @@ import oilFreeImg from "../../assets/delta3.png";
 import delta3 from "../../assets/delta3.png";
 import delta5 from "../../assets/delta5.png";
 import delta6 from "../../assets/delta6.png";
+import delta7 from "../../assets/delta7.png";
 import accessoriesImg from "../../assets/delta4.png";
 import delta4 from "../../assets/delta4.png";
 import railwayImg from "../../assets/delta3.png";
@@ -150,13 +151,56 @@ const HomePage = () => {
   
 
 
-      <div className="flex flex-col md:flex-row md:space-x-6 space-y-6 md:space-y-0">
+
+<section
+      className="relative flex items-center justify-center h-[60vh] min-h-[400px] max-h-[700px] w-full bg-cover bg-center text-white overflow-hidden border-b-8 border-blue-700 shadow-inner"
+      style={{ 
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(${delta7})`, 
+        backgroundPosition: 'center' 
+      }}
+      data-aos="fade-in"
+    >
+      {/* Dynamic Blue Overlay/Shape Effect (Inspired by your original design) */}
+      <div className="absolute inset-0 pointer-events-none">
+        <svg className="absolute bottom-0 left-0 w-full h-1/2" viewBox="0 0 1440 320" preserveAspectRatio="none">
+          <path fill="rgba(30, 64, 175, 0.8)" fillOpacity="1" d="M0,160L60,170.7C120,181,240,203,360,202.7C480,203,600,181,720,176C840,171,960,181,1080,170.7C1200,160,1320,139,1380,128L1440,117L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path>
+        </svg>
+      </div>
+
+      {/* Content Block */}
+      <div className="z-10 text-center max-w-4xl p-4">
+        <h1 className="text-6xl md:text-7xl font-extrabold tracking-tight mb-4 text-white drop-shadow-lg">
+          DELTA AIR
+        </h1>
+        <p className="text-xl md:text-2xl font-medium mb-8 text-blue-200 drop-shadow-md">
+          Technology Towards Excellence in Compressed Air Solutions
+        </p>
+        
+        {/* Product/Feature Highlights */}
+        <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 mb-10">
+            <span className="text-lg font-semibold bg-blue-600/70 px-4 py-2 rounded-full shadow-md">Oil Flooded Screw Compressors</span>
+            <span className="text-lg font-semibold bg-blue-600/70 px-4 py-2 rounded-full shadow-md">Refrigerated Air Dryers</span>
+            <span className="text-lg font-semibold bg-blue-600/70 px-4 py-2 rounded-full shadow-md">Advanced Microcontroller</span>
+        </div>
+
+        <a
+          href="/contactUs" // Link to your contact or quote page
+          className="inline-block bg-yellow-400 text-gray-900 px-10 py-4 rounded-full font-bold text-xl tracking-wide transition-all duration-300 hover:bg-yellow-300 hover:scale-105 shadow-xl"
+        >
+          REQUEST A QUOTE NOW
+        </a>
+      </div>
+    </section>
+  
+
+
+      <div className="flex flex-col md:flex-row md:space-x-6 space-y-6 md:space-y-0 gap-2">
         <div className="md:w-1/2">
           <ProductSection
             title="MEDICAL AIR COMPRESSORS & VACUUM PUMPS"
             description="Pattons Medical sells medical scroll compressors, vacuum pumps, driers and other medical gas equipment. For more information you can visit the website."
-            image={medicalImg}
-            link="/collections/medical"
+            image={delta7}
+            link="/contactUs"
           />
         </div>
 
