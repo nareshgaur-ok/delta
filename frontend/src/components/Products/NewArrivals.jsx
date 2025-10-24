@@ -2,6 +2,7 @@ import portableImg from "../../assets/delta2.png";
 import oilFreeImg from "../../assets/delta3.png";
 import delta3 from "../../assets/delta3.png";
 import delta5 from "../../assets/delta5.png";
+import delta6 from "../../assets/delta6.png";
 import accessoriesImg from "../../assets/delta4.png";
 import delta4 from "../../assets/delta4.png";
 import railwayImg from "../../assets/delta3.png";
@@ -94,9 +95,9 @@ const HomePage = () => {
       />
       <ProductSection1
         title="PORTABLE COMPRESSORS"
-        description="ELGi’s trolley and skid compressors support compressed air requirements in rugged environments and remote areas with utmost reliability. ELGi's portable range has evolved to meet the changing demands of the construction, mining, oil & gas and water well sectors. They are designed to offer high efficiency, productivity and ease of use."
-        image={portableImg}
-        link="/collections/portable"
+        description="DELTA trolley and skid compressors support compressed air requirements in rugged environments and remote areas with utmost reliability. DELTA's portable range has evolved to meet the changing demands of the construction, mining, oil & gas and water well sectors. They are designed to offer high efficiency, productivity and ease of use."
+        image={delta6}
+        link="/contactUs"
       />
 
       <FeaturesSection />
